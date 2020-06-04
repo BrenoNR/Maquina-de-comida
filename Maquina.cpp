@@ -6,9 +6,9 @@
 using namespace std;
 
 int main (){
-	int i, produ; // i = contagem, produ == codigo do produto
+	int i, produ, quant[2] = {2, 2}; // i = contagem, produ == codigo do produto, quant == vetor de quantidade das mercadorias com um valor padrão para começar
 	char esc, cod, prod[2][20] = {"Chocolate - R$ 5,00", "Suco - R$ 2,50"}; //cod = usuario ou adm e Matriz dos produtos
-	float soma, din, troco; //din == dinheiro do usuario
+	float soma = 0, din, troco; //din == dinheiro do usuario
 	
 	cout << "Usuario ou Administrador? (U/A)" << endl;
 	cin >> cod;
@@ -25,7 +25,7 @@ int main (){
 		
 		for ( i = 0; i < 2; i++){
 			
-			cout << "|" << i + 1 << "|      " << prod[i] << endl;
+			cout << "|" << i + 1 << "|      " << prod[i] << " x" << quant[i] << endl;
 			
 		}
 		//Laço para mostrar os produtos e seu codigo
@@ -35,19 +35,43 @@ int main (){
 		
 		if (produ == 1){
 			
-			cout << "Você escolheu um chocolate!" << endl << endl;
+			if (quant[0] == 0){
 			
-			soma += 5;
+				cout << "Este produto não está mais disponivel" << endl << endl;
+				
+			}
+			
+				else if (quant[0] > 0){
+			
+					cout << "Você escolheu um chocolate!" << endl << endl;
+			
+					soma += 5;
+					quant[0] -= 1;
+			
+				}	
+			//Condicional para soma do preço e teste de quantidade
 			
 		}
 		
 			else if (produ == 2){
 				
-				cout << "Voce escolheu um suco!" << endl << endl;
+				if (quant[1] == 0){
+					
+					cout << "Este produto não está mais disponivel" << endl << endl;
+					
+				}
 				
-				soma += 2.50;
+					else if(quant[1] > 0){
+					
+						
+						cout << "Voce escolheu um suco!" << endl << endl;
+				
+						soma += 2.50;
+						quant[1] -= 1;
+						
+					}
+				//Condicional para soma do preço e teste de quantidade
 			} 
-		//Condicional para soma do preço
 		
 		
 		cout << "Sua conta final é de R$ " << soma << ", deseja comprar mais? (S/N)" << endl;
@@ -90,10 +114,9 @@ int main (){
 
 //Variaveis da parte de ADM
 	
-int j = 3;				//j = numero de tentativas de senha
-double padrao = 123;	//padrao = senha padrao do sistema
-double senha;			//senha = entrada do usuario para fazer a comparação com o padrao
-
+int j = 3, codrep, quan, volt, escadm;		//j = numero de tentativas de senha, codrep == codigo para reposição, quan == quantidade para repor, volt == voltar para tela inicial, escadm == escolher ação
+double padrao = 123, senha;					//padrao = senha padrao do sistema, senha = entrada do usuario para fazer a comparação com o padrao
+							
 //Inicio ADM
 
 if (cod == 'A' || cod == 'a'){
@@ -130,6 +153,7 @@ if (cod == 'A' || cod == 'a'){
 		}
 		
 		if (senha == padrao){
+		//Condicional para quando a senha antiga for correta
 			
 			cout << "Digite a senha nova! (Apenas numeros)" << endl;
 			cin >> padrao;
@@ -145,7 +169,7 @@ if (cod == 'A' || cod == 'a'){
 				}while (padrao == 1);
 				
 			}
-			//Erro pra quando a senha for == 1
+			//Erro pra quando a senha NOVA for == 1
 			
 			
 			cout << "Digite a senha cadastrada" << endl;
@@ -169,7 +193,7 @@ if (cod == 'A' || cod == 'a'){
 			}
 			//Segundo laço para caso a senha nova for errada
 		}
-		//Condicional para quando a senha antiga for correta
+		
 	}
 	//Arvore codicional para redefinição de senha
 	
@@ -182,24 +206,77 @@ if (cod == 'A' || cod == 'a'){
 		
 			if (senha == 2840482011030){
 				
+				cout << "A senha atual é " << padrao << ", faça bom uso" << endl;
 				break;
 			
 			}
-		
+			//Saída de emergencia
 		
 		}while (senha != padrao);
 	}
+	do{
 		
+	soma = quant[0] * 5 + quant[1] * 2.5;
+	//Soma do ganho futuro
 	
 	
-
-
-
-
-
-
-
-	cout << "Bem-vindo!";
+	cout << endl;
+	cout << "Bem-vindo! Segue o inventario" << endl << endl;
+	
+	for ( i = 0; i < 2; i++){
+			
+			cout << "|" << i + 1 << "|      " << prod[i] << " x" << quant[i] << endl;
+			
+	}
+	
+	cout << endl;
+	cout << "Seu faturamento final pode ser de R$" << soma << " caso venda todo o estoque" << endl << endl;
+	
+	cout << "Adicionar mais produtos (1), ver faturamento atual (2), sair do programa (3)" << endl;
+	cin >> escadm;
+	//Tela inicial
+	
+	
+	
+	if (escadm == 1){
+		
+		cout << "Digite o codigo do produto, e a quantidade respectivamente" << endl;
+		cin >> codrep;
+		cin >> quan;
+		
+			if (codrep == 1){
+				
+				quant[0] += quan;
+				
+			}
+				else if (codrep == 2){
+					
+					quant[1] += quan;
+					
+				}
+					else {
+					
+						
+						cout << "Codigo invalido, este produto não esta cadastrado" << endl << endl;
+					}
+					//Caso coloque codigo errado	
+						
+		cout << "Reposição terminada, para voltar a tela inicial, digite (4), ou qualquer outra coisa para sair" << endl;
+		cin >> volt;
+		//Condicional para aumentar a quantidade de produtos
+	}
+		
+		
+	if (escadm == 3){
+		
+		cout << endl;
+		cout << "Tenha um bom dia!";			
+		exit(0);
+					
+	}
+	//Terceira opção do menu
+			
+	}while(volt == 4);
 }
 
 	return 0;
