@@ -2,13 +2,16 @@
 
 #include <iostream>
 #include <locale.h> //biblioteca de acentos
+#include <fstream>  //biblioteca para o armazenamento de dados externos
 
 using namespace std;
 
 int main (){
-	int i, produ, quant[2] = {2, 2}; // i = contagem, produ == codigo do produto, quant == vetor de quantidade das mercadorias com um valor padrão para começar
+	int i, produ, quant[2]= {0, 0}; // i = contagem, produ == codigo do produto, quant == vetor de quantidade das mercadorias com um valor padrão para começar
 	char esc, cod, prod[2][20] = {"Chocolate - R$ 5,00", "Suco - R$ 2,50"}; //cod = usuario ou adm e Matriz dos produtos
 	float soma = 0, din, troco; //din == dinheiro do usuario
+	ofstream dadosO; //Variavel de saida de dados
+	ifstream dadosI; //Entrada de dados
 	
 	cout << "Usuario ou Administrador? (U/A)" << endl;
 	cin >> cod;
@@ -20,7 +23,18 @@ int main (){
 	if (cod == 'U' || cod == 'u') {
 		
 		do {
+		
+		dadosI.open("Quantidade.txt");
+		
+		for (i = 0; i < 2; i++){
 			
+			dadosI >> quant[i];
+			
+		}
+		
+		dadosI.close();
+		//Atualização de estoque
+		
 		cout << "Bem vindo! Estes são os nossos produtos disponiveis, digite o numero correspondente para selecionar: " << endl << endl;
 		
 		for ( i = 0; i < 2; i++){
@@ -47,7 +61,7 @@ int main (){
 			
 					soma += 5;
 					quant[0] -= 1;
-			
+					
 				}	
 			//Condicional para soma do preço e teste de quantidade
 			
@@ -73,6 +87,16 @@ int main (){
 				//Condicional para soma do preço e teste de quantidade
 			} 
 		
+		dadosO.open("Quantidade.txt");
+		
+		for (i = 0; i < 2; i++){
+			
+			dadosO << quant[i] << endl;	
+			
+		}
+		
+		dadosO.close();
+		//Gravar a quantidade de produtos restantes
 		
 		cout << "Sua conta final é de R$ " << soma << ", deseja comprar mais? (S/N)" << endl;
 		cin >> esc;
@@ -114,13 +138,29 @@ int main (){
 
 //Variaveis da parte de ADM
 	
-int j = 3, codrep, quan, volt, escadm;		//j = numero de tentativas de senha, codrep == codigo para reposição, quan == quantidade para repor, volt == voltar para tela inicial, escadm == escolher ação
-double padrao = 123, senha;					//padrao = senha padrao do sistema, senha = entrada do usuario para fazer a comparação com o padrao
-							
+int j = 3, codrep, quan, volt, escadm;			//j = numero de tentativas de senha, codrep == codigo para reposição, quan == quantidade para repor, volt == voltar para tela inicial, escadm == escolher ação
+double senha, padrao;							//padrao = senha padrao do sistema, senha = entrada do usuario para fazer a comparação com o padrao;							
+
 //Inicio ADM
 
 if (cod == 'A' || cod == 'a'){
+	
+	dadosI.open("Senha.txt");
+	
+	if (dadosI.is_open()){
 		
+		dadosI >> padrao;
+		
+	}	
+		else {
+			
+			cout << "Arquivos corrompidos, entre em contato com o desenvolvedor";
+			exit(0);
+			
+		}
+	dadosI.close();
+	//Atualizar e testar para ver se a senha esta tudo certo
+			
 	cout << "Digite a senha cadastrada, para redefini-la, aperte (1) "<< endl;
 	cin >> senha;
 	
@@ -158,6 +198,8 @@ if (cod == 'A' || cod == 'a'){
 			cout << "Digite a senha nova! (Apenas numeros)" << endl;
 			cin >> padrao;
 			
+			dadosO.open("Dados.txt");
+			//Abrir o arquivo de texto para gravar a senha nova
 			
 			if (padrao == 1){
 				
@@ -171,6 +213,9 @@ if (cod == 'A' || cod == 'a'){
 			}
 			//Erro pra quando a senha NOVA for == 1
 			
+			dadosO << padrao << endl;
+			dadosO.close();
+			//Gravação da nova senha padrão no txt
 			
 			cout << "Digite a senha cadastrada" << endl;
 			cin >> senha;
@@ -214,14 +259,27 @@ if (cod == 'A' || cod == 'a'){
 		
 		}while (senha != padrao);
 	}
-	do{
-		
-	soma = quant[0] * 5 + quant[1] * 2.5;
-	//Soma do ganho futuro
 	
+	
+	do{
 	
 	cout << endl;
 	cout << "Bem-vindo! Segue o inventario" << endl << endl;
+	
+	dadosI.open("Quantidade.txt");
+		
+		for (i = 0; i < 2; i++){
+			
+			dadosI >> quant[i];
+			
+		}
+		
+	dadosI.close();
+	//Gravar as atualizações de estoque
+	
+	soma = quant[0] * 5 + quant[1] * 2.5;
+	//Soma do ganho futuro
+	
 	
 	for ( i = 0; i < 2; i++){
 			
@@ -259,7 +317,18 @@ if (cod == 'A' || cod == 'a'){
 						
 						cout << "Codigo invalido, este produto não esta cadastrado" << endl << endl;
 					}
-					//Caso coloque codigo errado	
+					//Caso coloque codigo errado
+					
+		dadosO.open("Quantidade.txt");
+		
+			for (i = 0; i < 2; i++){
+				
+				dadosO << quant[i] << endl;
+				
+			}
+		
+		dadosO.close();	
+		//Gravar reposição de produtos no txt
 						
 		cout << "Reposição terminada, para voltar a tela inicial, digite (4), ou qualquer outra coisa para sair" << endl;
 		cin >> volt;
