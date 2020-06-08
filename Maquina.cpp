@@ -1,24 +1,29 @@
-//Breno Augusto - RA 2840482011030 - Maquina de Lanches.
+//Breno Augusto - RA 2840482011030 - Nova maquina de lanches da Polishop.
 
 #include <iostream>
-#include <locale.h> //biblioteca de acentos
-#include <fstream>  //biblioteca para o armazenamento de dados externos
+#include <locale.h>  //biblioteca de acentos
+#include <fstream>  //biblioteca para o armazenamento de dados 
 
 using namespace std;
 
 int main (){
-	int i, produ, quant[2]= {0, 0}; // i = contagem, produ == codigo do produto, quant == vetor de quantidade das mercadorias com um valor padrão para começar
-	char esc, cod, prod[2][20] = {"Chocolate - R$ 5,00", "Suco - R$ 2,50"}; //cod = usuario ou adm e Matriz dos produtos
-	float soma = 0, din, troco; //din == dinheiro do usuario
-	ofstream dadosO; //Variavel de saida de dados
-	ifstream dadosI; //Entrada de dados
+	int i, produ, quant[6]= {0, 0, 0, 0, 0, 0}; 	    // i = contagem, produ == codigo do produto, quant == vetor de quantidade das mercadorias com um valor padrão para começar
+	char esc, cod; 						   			   //cod = usuario ou adm, esc == continuar a comprar ou nao
+	float soma = 0, din, troco, fat; 	  			  //din == dinheiro do usuario, fat == variavel auxiliar para o faturamento atual
+	ofstream dadosO; 					 			 //Variavel de saida de dados
+	ifstream dadosI; 								//Entrada de dados
+	char prod[6][30] = {"Chocolate - R$ 5,00", "Batata Chips - R$ 3,00", "Barra de cereal - R$ 1,50", "Suco - R$ 2,50", "Refrigerante - R$ 3,00", "Agua - R$ 1,00"}; 
+	
+	//Inicio do programa
 	
 	cout << "Usuario ou Administrador? (U/A)" << endl;
 	cin >> cod;
 		
 	setlocale(LC_ALL, "Portuguese");	
 	
+	
 	//Inicio Usuario
+	
 		
 	if (cod == 'U' || cod == 'u') {
 		
@@ -26,7 +31,7 @@ int main (){
 		
 		dadosI.open("Quantidade.txt");
 		
-		for (i = 0; i < 2; i++){
+		for (i = 0; i < 6; i++){
 			
 			dadosI >> quant[i];
 			
@@ -35,14 +40,26 @@ int main (){
 		dadosI.close();
 		//Atualização de estoque
 		
+		//Inicio sessão de compras
 		cout << "Bem vindo! Estes são os nossos produtos disponiveis, digite o numero correspondente para selecionar: " << endl << endl;
 		
-		for ( i = 0; i < 2; i++){
+		cout << "Comidas: " << endl << endl;
+		
+		for ( i = 0; i < 3; i++){
 			
 			cout << "|" << i + 1 << "|      " << prod[i] << " x" << quant[i] << endl;
 			
 		}
-		//Laço para mostrar os produtos e seu codigo
+		//Laço para mostrar comidas
+		
+		cout << endl;
+		cout << "Bebidas: " << endl << endl;
+		
+		for (i = 3; i < 6; i++){
+			
+			cout << "|" << i + 1 << "|      " << prod[i] << " x" << quant[i] << endl;
+		}
+		//Laço para mostrar bebidas
 		
 		cin >> produ;
 		
@@ -63,7 +80,7 @@ int main (){
 					quant[0] -= 1;
 					
 				}	
-			//Condicional para soma do preço e teste de quantidade
+			
 			
 		}
 		
@@ -78,18 +95,100 @@ int main (){
 					else if(quant[1] > 0){
 					
 						
-						cout << "Voce escolheu um suco!" << endl << endl;
+						cout << "Voce escolheu uma Batata Chips!" << endl << endl;
 				
-						soma += 2.50;
+						soma += 3;
 						quant[1] -= 1;
 						
 					}
-				//Condicional para soma do preço e teste de quantidade
+				
 			} 
+				
+						else if (produ == 3){
+				
+							if (quant[2] == 0){
+					
+								cout << "Este produto não está mais disponivel" << endl << endl;
+					
+							}
+				
+								else if(quant[2] > 0){
+					
+						
+									cout << "Voce escolheu uma barrinha de cereal!" << endl << endl;
+				
+									soma += 1.50;
+									quant[2] -= 1;
+						
+								}
+								
+						} 
+		
+								else if (produ == 4){
+				
+									if (quant[3] == 0){
+					
+										cout << "Este produto não está mais disponivel" << endl << endl;
+					
+									}
+				
+										else if(quant[3] > 0){
+					
+						
+											cout << "Voce escolheu um suco!" << endl << endl;
+				
+												soma += 2.5;
+												quant[3] -= 1;
+						
+										}
+				
+								} 
+								
+										else if (produ == 5){
+				
+											if (quant[4] == 0){
+					
+												cout << "Este produto não está mais disponivel" << endl << endl;
+					
+											}
+				
+											else if(quant[4] > 0){
+					
+						
+												cout << "Voce escolheu um refri!" << endl << endl;
+				
+												soma += 3;
+												quant[4] -= 1;
+						
+											}
+				
+										} 
+										
+											else if (produ == 6){
+				
+												if (quant[5] == 0){
+					
+													cout << "Este produto não está mais disponivel" << endl << endl;
+					
+												}
+				
+												else if(quant[5] > 0){
+					
+						
+														cout << "Voce escolheu uma água!" << endl << endl;
+				
+														soma += 1;
+														quant[5] -= 1;
+						
+												}
+				
+											} 
+		//Arvore condicional para cada produto
+		
 		
 		dadosO.open("Quantidade.txt");
 		
-		for (i = 0; i < 2; i++){
+		for (i = 0; i < 6; i++){
 			
 			dadosO << quant[i] << endl;	
 			
@@ -98,19 +197,21 @@ int main (){
 		dadosO.close();
 		//Gravar a quantidade de produtos restantes
 		
+		
 		cout << "Sua conta final é de R$ " << soma << ", deseja comprar mais? (S/N)" << endl;
 		cin >> esc;
 		//Ver se o usuario quer continuar suas compras
 		
 		
 		}while(esc != 'N');
+		//Fim da sessão de compras
 		
+		//Inicio do pagamento
 		
 		cout << "Coloque seu dinheiro na maquina" << endl;
 		cin >> din;
 		
-		
-			if (din < soma){
+		if (din < soma){
 				
 				do{
 					
@@ -121,7 +222,7 @@ int main (){
 				}while(din < soma);
 				
 			}
-			//Caso para quando o usuario nao tiver dinheiro suficiente
+		//Caso para quando o usuario nao tiver dinheiro suficiente
 		
 		troco = din - soma;
 		//Calculo do troco
@@ -129,8 +230,35 @@ int main (){
 		cout.precision(2);
 		cout << fixed;
 		
+		
 		cout << "Seu troco é de R$ " << troco << ", agradecemos sua preferência! Volte sempre!";
+		
+		
+		
+		dadosI.open("Faturamento.txt");
+		
+		dadosI >> fat;
+		
+		dadosI.close();
+		//Ler o faturamento atual
+		
+		
+		soma += fat;
+		//Calculo do faturamento atual
+		
+		
+		dadosO.open("Faturamento.txt");
+		
+		dadosO << soma;
+		
+		dadosO.close();
+		//Gravação do faturamento no txt
+		
+		//Fim pagamento
+		
 		//Fim Usuario.
+		
+		//Fim do programa
 	}
 	
 	
@@ -138,26 +266,19 @@ int main (){
 
 //Variaveis da parte de ADM
 	
-int j = 3, codrep, quan, volt, escadm;			//j = numero de tentativas de senha, codrep == codigo para reposição, quan == quantidade para repor, volt == voltar para tela inicial, escadm == escolher ação
-double senha, padrao;							//padrao = senha padrao do sistema, senha = entrada do usuario para fazer a comparação com o padrao;							
+int j = 3, codrep, quan, volt, escadm;				 //j = numero de tentativas de senha, codrep == codigo para reposição, quan == quantidade para repor, volt == voltar para tela inicial, escadm == escolher ação
+double senha, padrao = 123;							//padrao = senha padrao do sistema, senha = entrada do usuario para fazer a comparação com o padrao;							
 
 //Inicio ADM
 
 if (cod == 'A' || cod == 'a'){
 	
+	//Inicio inserção de senha
+	
 	dadosI.open("Senha.txt");
 	
-	if (dadosI.is_open()){
+	dadosI >> padrao;
 		
-		dadosI >> padrao;
-		
-	}	
-		else {
-			
-			cout << "Arquivos corrompidos, entre em contato com o desenvolvedor";
-			exit(0);
-			
-		}
 	dadosI.close();
 	//Atualizar e testar para ver se a senha esta tudo certo
 			
@@ -170,6 +291,7 @@ if (cod == 'A' || cod == 'a'){
 			
 		cout << "Digite a senha antiga" << endl;
 		cin >> senha;
+		
 		
 		if (senha != padrao){
 			
@@ -188,17 +310,18 @@ if (cod == 'A' || cod == 'a'){
 					
 				}
 			}
-			//Laço para determinar o numero de tentativas para se colocar a senha certa
+			
 			
 		}
+		//Laço para determinar o numero de tentativas para se colocar a senha certa
+		
 		
 		if (senha == padrao){
-		//Condicional para quando a senha antiga for correta
 			
 			cout << "Digite a senha nova! (Apenas numeros)" << endl;
 			cin >> padrao;
 			
-			dadosO.open("Dados.txt");
+			dadosO.open("Senha.txt");
 			//Abrir o arquivo de texto para gravar a senha nova
 			
 			if (padrao == 1){
@@ -238,9 +361,9 @@ if (cod == 'A' || cod == 'a'){
 			}
 			//Segundo laço para caso a senha nova for errada
 		}
+		//Condicional para quando a senha antiga for correta
 		
 	}
-	//Arvore codicional para redefinição de senha
 	
 	if (senha != padrao){
 		
@@ -251,15 +374,20 @@ if (cod == 'A' || cod == 'a'){
 		
 			if (senha == 2840482011030){
 				
+				cout << endl;
+				cout << "Bom dia senhor! É muito bom ve-lo por aqui, aceita um café?" << endl << endl;
 				cout << "A senha atual é " << padrao << ", faça bom uso" << endl;
 				break;
 			
 			}
-			//Saída de emergencia
 		
 		}while (senha != padrao);
 	}
+	//Erro e saída de emergencia "exclusiva"
 	
+	//Fim inserção de senha
+	
+	//Inicio interação com o administrador
 	
 	do{
 	
@@ -268,7 +396,7 @@ if (cod == 'A' || cod == 'a'){
 	
 	dadosI.open("Quantidade.txt");
 		
-		for (i = 0; i < 2; i++){
+		for (i = 0; i < 6; i++){
 			
 			dadosI >> quant[i];
 			
@@ -277,20 +405,41 @@ if (cod == 'A' || cod == 'a'){
 	dadosI.close();
 	//Gravar as atualizações de estoque
 	
-	soma = quant[0] * 5 + quant[1] * 2.5;
+	soma = quant[0] * 5 + quant[1] * 3 + quant[2] * 1.5 + quant[3] * 2.5 + quant[4] * 3 + quant[5] ;
 	//Soma do ganho futuro
 	
+	cout << "Comidas: " << endl << endl;
 	
-	for ( i = 0; i < 2; i++){
+	for ( i = 0; i < 3; i++){
 			
-			cout << "|" << i + 1 << "|      " << prod[i] << " x" << quant[i] << endl;
+		cout << "|" << i + 1 << "|      " << prod[i] << " x" << quant[i] << endl;
 			
+	}
+	
+	
+	cout << endl;
+	cout << "Bebidas: " << endl << endl;
+	
+	for (i = 3; i < 6; i++){
+		
+		cout << "|" << i + 1 << "|      " << prod[i] << " x" << quant[i] << endl;
+		
 	}
 	
 	cout << endl;
 	cout << "Seu faturamento final pode ser de R$" << soma << " caso venda todo o estoque" << endl << endl;
 	
-	cout << "Adicionar mais produtos (1), ver faturamento atual (2), sair do programa (3)" << endl;
+	dadosI.open("Faturamento.txt");
+	
+	dadosI >> fat;
+	
+	dadosI.close();
+	//Leitura do faturamento atual
+	
+	cout << "Seu Faturamento atual é de R$" << fat << endl << endl;	
+	
+	
+	cout << "Adicionar mais produtos (1), sair do programa (2)" << endl;
 	cin >> escadm;
 	//Tela inicial
 	
@@ -312,16 +461,37 @@ if (cod == 'A' || cod == 'a'){
 					quant[1] += quan;
 					
 				}
-					else {
+					else if (codrep == 3){
 					
-						
-						cout << "Codigo invalido, este produto não esta cadastrado" << endl << endl;
+						quant[2] += quan;
+					
 					}
-					//Caso coloque codigo errado
+						else if (codrep == 4){
+					
+							quant[3] += quan;
+					
+						}
+							else if (codrep == 5){
+					
+								quant[4] += quan;
+					
+							}
+								else if (codrep == 6){
+					
+									quant[5] += quan;
+					
+								}
+					
+									else {
+					
+										cout << "Codigo invalido, este produto não esta cadastrado" << endl << endl;
+									}
+									//Caso coloque codigo errado
+		
 					
 		dadosO.open("Quantidade.txt");
 		
-			for (i = 0; i < 2; i++){
+			for (i = 0; i < 6; i++){
 				
 				dadosO << quant[i] << endl;
 				
@@ -330,13 +500,13 @@ if (cod == 'A' || cod == 'a'){
 		dadosO.close();	
 		//Gravar reposição de produtos no txt
 						
-		cout << "Reposição terminada, para voltar a tela inicial, digite (4), ou qualquer outra coisa para sair" << endl;
+		cout << "Reposição terminada, para voltar a tela inicial digite (3), ou qualquer outra coisa para sair" << endl;
 		cin >> volt;
 		//Condicional para aumentar a quantidade de produtos
 	}
-		
-		
-	if (escadm == 3){
+	//Arvore condicional para reposição		
+			
+	if (escadm == 2){
 		
 		cout << endl;
 		cout << "Tenha um bom dia!";			
@@ -344,8 +514,12 @@ if (cod == 'A' || cod == 'a'){
 					
 	}
 	//Terceira opção do menu
+	
+	//Fim da interação com o administrador
+	
+	//Fim do programa
 			
-	}while(volt == 4);
+	}while(volt == 3);
 }
 
 	return 0;
